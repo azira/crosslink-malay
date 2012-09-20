@@ -1,8 +1,12 @@
 <!doctype html>
-<!-- The DOCTYPE declaration above will set the     -->
-<!-- browser's rendering engine into                -->
-<!-- "Standards Mode". Replacing this declaration   -->
-<!-- with a "Quirks Mode" doctype is not supported. -->
+<!--  
+Project Title: Cross Language Wikipedia Link Discovery
+Unit: INN698 Semester 2
+Description: The 2011 Brunei Student Society Brisbane Website Layout for KIP403 Assignment 2.
+Author: Hazirah Hamdani (n6945953)
+Author URI: http://zee-note.net/
+Version: 1.0
+-->
 
 <html>
   <head>
@@ -16,7 +20,7 @@
     <!--                                           -->
     <!-- Any title is fine                         -->
     <!--                                           -->
-    <title>Web Application Starter Project</title>
+    <title>WikiME - Cross Language Wikipedia Link Discovery Malay to English</title>
     
     <!--                                           -->
     <!-- This script loads your compiled module.   -->
@@ -44,20 +48,26 @@
       </div>
     </noscript>
 
-    <h1>Web Application Starter Project</h1>
+    <h1>WikiME</h1>
 
     <table align="center">
       <tr>
-        <td colspan="2" style="font-weight:bold;">Please enter your name:</td>        
+        <td  colspan="2" id="labelText" align="center"></td>        
       </tr>
       <tr>
-        <td id="nameFieldContainer"></td>
-        <td id="sendButtonContainer"></td>
+        <td id="urlField"></td>
+        <td id="goButton"></td>
       </tr>
-      <tr>
-        <td colspan="2" style="color:red;" id="errorLabelContainer"></td>
+  		<tr>
+        <td colspan="2" style="color:red;" id="errorLabelContainer" align="center"></td>
       </tr>
+ 
     </table>
-      <div id="frameContainer"></div>
+<table align=center>
+     <tr>
+      <td  colspan="2"  id="htmlContainer"></td>
+      </tr>
+      </table>
+    
   </body>
 </html>
