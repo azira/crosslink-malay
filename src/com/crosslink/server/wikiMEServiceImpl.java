@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.crosslink.client.Webcontent;
 import com.crosslink.client.wikiMEService;
@@ -39,7 +38,7 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 
 		
 		// Find anchor words
-		// messageString = anchorArticle(messageString);
+		messageString = findWord(messageString);
 
 		Webcontent content = new Webcontent();
 		content.setwebContent(messageString);
@@ -76,9 +75,19 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 		return replacedContent;
 	}
 
-	private String anchorArticle(String content) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * Tag Malay word
+	 * 
+	 * @param content
+	 * @return Tagged Malay Word
+	 */
+	private String findWord(String content) {
+		// Find word from Wikipedia Dump
+		// find word and add <anchor></anchor> around it to be anchored
+		String word = "Protokol";
+		content = content.replace(word, "<anchor>" + word + "</anchor>");
+
+		return content;
 	}
 
 	/**
@@ -99,8 +108,7 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 			urlConnection.setReadTimeout(10000);
 			// int respCode = urlConnection.getResponseCode();
 			// message = urlConnection.getResponseMessage();
-			InputStream in = new BufferedInputStream(
-					urlConnection.getInputStream());
+			//InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 			reader = new BufferedReader(new InputStreamReader(
 					pageURL.openStream()));
 
