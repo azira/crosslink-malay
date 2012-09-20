@@ -1,0 +1,2 @@
+serviceClass: com.crosslink.client.wikiMEService
+path: 1FFF732277E724D994AE465A8D486574.gwt.rpc

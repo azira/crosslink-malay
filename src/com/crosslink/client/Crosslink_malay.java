@@ -50,7 +50,6 @@ public class Crosslink_malay implements EntryPoint {
 						/* make remote call to server to get the message */
 						wikiMEService.getwebcontent(urlText.getValue(),
 								new ContentCallBack());
-						Window.alert("The webpage make take up to 1 minute to load!");
 					}
 					
 				}
@@ -72,7 +71,6 @@ public class Crosslink_malay implements EntryPoint {
 				/* make remote call to server to get the message */
 				wikiMEService.getwebcontent(urlText.getValue(),
 						new ContentCallBack());
-				Window.alert("The webpage make take up to 1 minute to load!");
 				}
 			}
 		});
@@ -102,9 +100,9 @@ public class Crosslink_malay implements EntryPoint {
 
 		@Override
 		public void onSuccess(Webcontent result) {
+			Window.alert("The webpage make take up to 1 minute to load!");
 			/* server returned result, show user the message */
 			webarticle = result.getwebContent();
-			
 			html.setHTML(webarticle);
 		}
 	}

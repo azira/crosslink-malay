@@ -1,0 +1,2 @@
+serviceClass: com.crosslink.client.GreetingService
+path: 4B00F89A17BA9C823F68757811C04ADF.gwt.rpc
