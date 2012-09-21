@@ -29,12 +29,13 @@ import com.google.gwt.user.client.ui.TextBox;
 public class Crosslink_malay implements EntryPoint {
 
 	private wikiMEServiceAsync wikiMEService = GWT.create(wikiMEService.class);
+	public String MalayTable = MalayLang.INSTANCE.loadTable().getText();
 	public String webarticle;
-	
+	protected String wikiLink = "";
 
 	public void onModuleLoad() {
+
 		/* create UI */
-		
 		final TextBox urlText = new TextBox();
 		urlText.setWidth("400");
 		urlText.setText("http://");
@@ -46,14 +47,14 @@ public class Crosslink_malay implements EntryPoint {
 					if (isUrl(urlText.getText())) {
 						Window.alert("Please enter a Malay web source!");
 						return;
-					
+
 					} else {
-	
+
 						/* make remote call to server to get the message */
 						wikiMEService.getwebcontent(urlText.getValue(),
-								new ContentCallBack());
+								MalayTable, new ContentCallBack());
 					}
-					
+
 				}
 			}
 		});
@@ -68,29 +69,45 @@ public class Crosslink_malay implements EntryPoint {
 				if (isUrl(urlText.getText())) {
 					Window.alert("Please enter a Malay web source!");
 					return;
-				
+
 				} else {
-				/* make remote call to server to get the message */
-				wikiMEService.getwebcontent(urlText.getValue(),
-						new ContentCallBack());
+					/* make remote call to server to get the message */
+					wikiMEService.getwebcontent(urlText.getValue(), MalayTable,
+							new ContentCallBack());
+
 				}
 			}
 		});
-		
+
 		RootPanel.get("labelText").add(lblName);
 		RootPanel.get("urlField").add(urlText);
 		RootPanel.get("goButton").add(goButton);
 
-
 	}
-	
+
+	/**
+	 * Checking User's input
+	 * 
+	 * @param Weburl
+	 *            input
+	 * @return True or False
+	 */
 	protected boolean isUrl(String input) {
-		if (input.isEmpty() || input.contentEquals("http://") || !input.contains("http://")) {
+		if (input.isEmpty() || input.contentEquals("http://")
+				|| !input.contains("http://")) {
 			return true;
 		} else {
 			return false;
 		}
 	}
+
+	/**
+	 * ContentCallBack for retrieving website HTML source. Will return error if
+	 * cannot obtain server response
+	 * 
+	 * @author Hazirah Hamdani
+	 * 
+	 */
 
 	private class ContentCallBack implements AsyncCallback<Webcontent> {
 		@Override
@@ -106,39 +123,57 @@ public class Crosslink_malay implements EntryPoint {
 			/* server returned result, show user the message */
 			webarticle = result.getwebContent();
 			HTMLPanel html = new HTMLPanel(webarticle);
+
+			// Get MalayList
 			anchorArticle(html);
 			RootPanel.get("htmlContainer").add(html);
-			
-			
+
 		}
 
 		/**
-		 * Add anchor link to respective Malay Word to English Wikipedia
-		 * Use Wikipedia Database Dump
+		 * Add anchor link to respective Malay Word to English Wikipedia Use
+		 * Wikipedia Database Dump
 		 * 
-		 * @param html widget
+		 * @param html
+		 * 
 		 */
-		private void anchorArticle(HTMLPanel html) {
+		private void anchorArticle(final HTMLPanel html) {
+
 			// Find Tagged Words
-			NodeList<Element> anchors = html.getElement().getElementsByTagName("anchor");
-			
-			for ( int i = 0 ; i < anchors.getLength() ; i++ ) {
-			    Element anchor = anchors.getItem(i);
-			    String anchorWord = anchor.getInnerHTML();
-			    // Find Word in Wikipedia Dump and retrieve English Wikipedia Link
-			    String anchorURL = "http://en.wikipedia.org/wiki/Transcript_(law)";
-			   
-			    
-			    if (anchor.getInnerHTML().contentEquals("Protokol")) {
-			    	
-			    	Anchor link = new Anchor(anchorWord, false, anchorURL, "_blank");
-			    	html.addAndReplaceElement(link, anchor);
-	
-			    }
-			    
-			  
+			NodeList<Element> anchors = html.getElement().getElementsByTagName(
+					"anchor");
+
+			for (int i = 0; i < anchors.getLength(); i++) {
+				final Element anchor = anchors.getItem(i);
+				final String anchorWord = anchor.getInnerHTML();
+				// Find Word in Wikipedia Dump and retrieve English Wikipedia
+				wikiMEService.getMalayWiki(anchorWord, MalayTable,
+						new AsyncCallback<String>() {
+							@Override
+							public void onFailure(Throwable caught) {
+								/* server side error occured */
+								Window.alert("Unable to get hashmap table: "
+										+ caught.getMessage());
+							}
+
+							@Override
+							public void onSuccess(String result) {
+
+								/* server returned result, show user the message */
+								wikiLink = result;
+								String anchorURL = "http://en.wikipedia.org/wiki/index.php?curid="
+										+ wikiLink;
+								Anchor link = new Anchor(anchorWord, false,
+										anchorURL, "_blank");
+								html.addAndReplaceElement(link, anchor);
+
+							}
+						});
+
 			}
-			
+
 		}
+
 	}
+
 }

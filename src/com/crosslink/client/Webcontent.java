@@ -10,9 +10,11 @@ public class Webcontent implements Serializable {
 
    public void setwebContent(String webcontent) {
       this.webcontent = webcontent;
+    
    }
 
    public String getwebContent() {
       return webcontent;
    }
+
 }
