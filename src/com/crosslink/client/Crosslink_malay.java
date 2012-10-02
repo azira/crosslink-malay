@@ -29,16 +29,33 @@ import com.google.gwt.user.client.ui.TextBox;
 public class Crosslink_malay implements EntryPoint {
 
 	private wikiMEServiceAsync wikiMEService = GWT.create(wikiMEService.class);
-	public String MalayTable = MalayLang.INSTANCE.loadTable().getText();
+	public String MalayTable = MyResource.INSTANCE.loadTable().getText();
 	public String webarticle;
 	protected String wikiLink = "";
 
 	public void onModuleLoad() {
-
+		// inject css source
+		 MyResource.INSTANCE.css().ensureInjected(); 
 		/* create UI */
+		
+		
 		final TextBox urlText = new TextBox();
 		urlText.setWidth("400");
 		urlText.setText("http://");
+
+		
+		Label lblName = new Label("Enter Malay Newspaper webpage: ");
+		Label wikiTitle = new Label("Wiki M2E");
+		wikiTitle.addStyleName("titleLabel");
+
+		Button goButton = new Button("GO");
+		goButton.addStyleName("goButton");
+		
+
+		RootPanel.get("labelText").add(lblName);
+		RootPanel.get("title").add(wikiTitle);
+		RootPanel.get("urlField").add(urlText);
+		RootPanel.get("goButton").add(goButton);
 		urlText.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
@@ -58,13 +75,12 @@ public class Crosslink_malay implements EntryPoint {
 				}
 			}
 		});
-		Label lblName = new Label("Enter Malay Newspaper webpage: ");
-
-		Button goButton = new Button("GO");
-
+		
 		goButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				// if Html panel is there
+
 				// Verify input url
 				if (isUrl(urlText.getText())) {
 					Window.alert("Please enter a Malay web source!");
@@ -79,9 +95,6 @@ public class Crosslink_malay implements EntryPoint {
 			}
 		});
 
-		RootPanel.get("labelText").add(lblName);
-		RootPanel.get("urlField").add(urlText);
-		RootPanel.get("goButton").add(goButton);
 
 	}
 
@@ -113,8 +126,9 @@ public class Crosslink_malay implements EntryPoint {
 		@Override
 		public void onFailure(Throwable caught) {
 			/* server side error occured */
-			Window.alert("Unable to obtain server response: "
-					+ caught.getMessage());
+			Window.alert("Unable to obtain server response");
+			HTMLPanel html = new HTMLPanel(caught.getMessage());
+			RootPanel.get("htmlContainer").add(html);
 		}
 
 		@Override
@@ -145,7 +159,12 @@ public class Crosslink_malay implements EntryPoint {
 
 			for (int i = 0; i < anchors.getLength(); i++) {
 				final Element anchor = anchors.getItem(i);
-				final String anchorWord = anchor.getInnerHTML();
+				String Word = anchor.getInnerHTML();
+				//delete spaces
+				Word =  Word.replace("\n", "");
+				Word = Word.replace(" ", "");
+				final String anchorWord = Word;
+			
 				// Find Word in Wikipedia Dump and retrieve English Wikipedia
 				wikiMEService.getMalayWiki(anchorWord, MalayTable,
 						new AsyncCallback<String>() {
