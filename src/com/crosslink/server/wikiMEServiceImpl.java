@@ -7,7 +7,9 @@ package com.crosslink.server;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.List;
+import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,10 +25,13 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 
 	public static final int STATUS_CODE_OK = 200;
 	public ArrayList<String> MalayWordList;
-	
+	private static List<String> anchoredWords = new ArrayList<String>();
+	private static ArrayList<String> newCon = new ArrayList<String>();
+
+
 	/***
-	 * Connect to website url to get the HTML contents and 
-	 * parse contents to anchor Malay words
+	 * Connect to website url to get the HTML contents and parse contents to
+	 * anchor Malay words
 	 * 
 	 */
 	public Webcontent getwebcontent(String weburl, String MalayTable) {
@@ -41,7 +46,12 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 			content = "Could not catch web content";
 		}
 
-		// if website newspaper from mediapermata
+		String test = "BANDAR SERI BEGAWAN, 2 Okt - Kebawah Duli Yang Maha Mulia Paduka Seri Baginda "
+				+ "Sultan Haji Hassanal Bolkiah Mu'izzaddin Waddaulah, Sultan dan Yang Di-Pertuan Negara Brunei "
+				+ "Darussalam telah berkenan menghantar titah perutusan tahniah kepada Presiden Republik Korea, "
+				+ "Lee Myung-Bak serta kerajaan dan rakyat Korea bersempena dengan Hari KebangsaanPengasasan Republik Korea.";
+
+		
 		if (weburl.contains("mediapermata")) {
 			Elements text = doc.select("p");
 
@@ -55,8 +65,6 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 				t.prepend("<p>");
 				t.append("</p>");
 
-				// Replaces content that has <anchor></anchor>
-				// content = content.replace(tmp, t.toString());
 
 			}
 		}
@@ -64,15 +72,14 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 		// if website newspaper from bharian
 		if (weburl.contains("bharian")) {
 			Element text = doc.select("div.article-body").first();
-				String tmp = text.html();
-				// Find anchor words
-				String anchorContent = findWord(tmp, MalayTable);
-				text.html(anchorContent);
-				text.prepend("<div class=\"article-body\">");
-				text.append("</div>");
-			
+			String tmp = text.html();
+			// Find anchor words
+			String anchorContent = findWord(tmp, MalayTable);
+			text.html(anchorContent);
+			text.prepend("<div class=\"article-body\">");
+			text.append("</div>");
+
 		}
-		
 		content = doc.html();
 
 		// fixing broken images
@@ -83,6 +90,8 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 			content = content.replace(imgAttr, absHref);
 
 		}
+		
+		
 		// System.out.println(content);
 		Webcontent webcontent = new Webcontent();
 		webcontent.setwebContent(content);
@@ -98,29 +107,124 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 	 * @return Tagged Malay Word
 	 */
 	private String findWord(String content, String malayTable) {
+		anchoredWords.clear();
+		newCon.clear();
 		ArrayList<String> MalayList = new ArrayList<String>();
-		String con = "";
 		MalayList = getMalayWord(malayTable);
-
+		String con = null;
 		String WordsToAnchor[] = content.split(" ");
-		for (int j = 0; j < WordsToAnchor.length; j++) {
 
-			// Find word from Malay Text File and compare with word
-			for (int k = 0; k < MalayList.size(); k++) {
-				// Check if word found in current paragraph
-				// find word and add <anchor></anchor> around it to be
-				// anchored
-				if (WordsToAnchor[j].equals(MalayList.get(k))) {
-					WordsToAnchor[j] = WordsToAnchor[j].replace(
-							MalayList.get(k), "<anchor>" + MalayList.get(k)
-									+ "</anchor>");
+		boolean found;
+		// Find word by word - article can have up to 4 words that is available
+		// in wikipedia
+		int WordsMax = WordsToAnchor.length;
+
+		for (int j = 0; j < WordsMax; j++) {
+			
+			String tmpWord1 = null;
+			String tmpWord2 = null;
+			String tmpWord3 = null;
+			String tmpWord4 = null;
+			if (j + 3 < WordsMax) {
+				tmpWord4 = WordsToAnchor[j] + " " + WordsToAnchor[j + 1] + " "
+						+ WordsToAnchor[j + 2] + " " + WordsToAnchor[j + 3];
+				// remove punctuation
+				tmpWord4 = tmpWord4.replaceAll("[\\p{Punct}&&[^<>./]]", "");
+				
+			}
+
+			if (j + 2 < WordsMax) {
+				tmpWord3 = WordsToAnchor[j] + " " + WordsToAnchor[j + 1] + " "
+						+ WordsToAnchor[j + 2];
+				// remove punctuation
+				tmpWord3 = tmpWord3.replaceAll("[\\p{Punct}&&[^<>./]]", "");
+				
+			}
+
+			if (j + 1 < WordsMax) {
+				tmpWord2 = WordsToAnchor[j] + " " + WordsToAnchor[j + 1];
+				// remove punctuation
+				tmpWord2 = tmpWord2.replaceAll("[\\p{Punct}&&[^<>./]]", "");
+				
+			}
+
+			tmpWord1 = WordsToAnchor[j];
+			//remove punctuation
+			tmpWord1 = tmpWord1.replaceAll("[\\p{Punct}&&[^<>./]]", "");
+			found = false;
+			
+			// Find four words & if found, replace
+			String replacedTmpWord4 = tmpWord4;
+			if (tmpWord4 != null) {
+				replacedTmpWord4 = replaceWord(tmpWord4, MalayList);
+				if (replacedTmpWord4 != null) {
+					// add 3 to point position
+					j = j + 3;
+					// pointing that word has been found and replaced
+					found = true;
+					
 				}
 			}
-			con = con.concat(WordsToAnchor[j] + " ");
+
+			String replacedTmpWord3 = tmpWord3;
+			if ((tmpWord3 != null) && (replacedTmpWord4 == null))  {
+				replacedTmpWord3 = replaceWord(tmpWord3, MalayList);
+				if (replacedTmpWord3 != null) {
+					j = j + 2;
+					found = true;
+					
+				}
+			}
+
+			String replacedTmpWord2 = tmpWord2;
+			if ((tmpWord2 != null) && (replacedTmpWord3 == null)) {
+				replacedTmpWord2 = replaceWord(tmpWord2, MalayList);
+				if (replacedTmpWord2 != null) {
+					j = j + 1;
+					found = true;
+					
+				}
+			}
+
+			String replacedTmpWord = tmpWord1;
+			if ((tmpWord1 != null) && (replacedTmpWord2 == null)) {
+				replacedTmpWord = replaceWord(tmpWord1, MalayList);
+				if (replacedTmpWord != null) {
+					found = true;
+				}
+			}
+
+			// if word not found, add the original text
+			if (found == false) {
+				newCon.add(WordsToAnchor[j]);
+			}
+
 		}
-
+		con = StringUtils.join(newCon, " ");
+		
 		return con;
+	}
 
+	private String replaceWord(String textString, ArrayList<String> MalayList) {
+		boolean replaced = false;
+		for (String word : MalayList) {
+			if ((StringUtils.equalsIgnoreCase(word, textString))
+					&& (!anchoredWords.contains(word))) {
+				textString = textString.replace(textString, "<anchor>"
+						+ textString + "</anchor>");
+				anchoredWords.add(word);
+				newCon.add(textString);
+				replaced = true;
+			}
+		}
+		
+		if (replaced == false) {
+		return null;
+		} else if (replaced == true) {
+			return textString;
+		}
+		
+		return null;
 	}
 
 	/**
@@ -133,7 +237,7 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 		String MalayList[] = MalayFileList(malayTable);
 		ArrayList<String> MalayArray = new ArrayList<String>();
 		for (int i = 0; i < MalayList.length; i++) {
-			String MalayWord[] = MalayList[i].split("\\r?\\:");
+			String MalayWord[] = MalayList[i].split(":");
 			MalayArray.add(MalayWord[0]);
 		}
 		return MalayArray;
@@ -159,7 +263,8 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public String getMalayWiki(String word, String malayTable) {
 		String MalayList[] = MalayFileList(malayTable);
-
+		word = StringUtils.strip(word);
+		System.out.println(word);
 		HashMap<String, String> wordList = new HashMap<String, String>();
 		String mWord = "";
 		String wiki = "";
@@ -173,7 +278,7 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 			// Insert mWord and wiki into HashMap
 			wordList.put(mWord, wiki);
 		}
-
-		return wordList.get(word);
+		
+		return wordList.get(WordUtils.capitalizeFully(word));
 	}
 }
