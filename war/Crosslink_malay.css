@@ -1,58 +1,94 @@
-/** Add css rules here for your application. */
-
-
-/** Example rules used by the template application (remove for your app) */
-
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+/** Style sheet for Web page
+ * Cross Language Wikipedia Link Discovery Web Version
+ * Author: Hazirah Hamdani
+ * Date: November 2012
+ *
+ * Crosslink_malay.css
+ * */
+body {
+ background-color: #FFFFFF;
+    color: #000000;
+    font-family: Georgia,verdana, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+    margin: 0;
+    cursor: default;
+  
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+#topLinks {
+	
+	 font-family: Georgia,verdana, Helvetica, sans-serif;
 }
 
-/** Most GWT widgets already have a style name defined */
-#gwt-Frame {
-	border-style: none;
-	width: 100%;
-	height: 700px;
+#footer {
+	 font-family: Georgia,verdana, Helvetica, sans-serif;
 }
 
-.gwt-Frame {
-	border-style: none;
-	width: 100%;
-	height: 700px;
+/* Style for top link nav */
+
+#topLinks a:link {
+    text-decoration: none;
+    color: #000000 !important;
+    font-weight: bold;
+    cursor: default;
 }
 
-#gwt-HTML {
-	border-style: none;
-	width: 100%;
-	height: 700px;
+#topLinks a:hover {
+	text-decoration: none;
+    color: #000000 !important;
+    font-weight: bold;
+
+    text-decoration: underline;
+    cursor: default;
 }
 
-.gwt-HTML {
-	border: 0px;
-	width: 100%;
-	height: 700px;
-}
-.gwt-DialogBox {
-  width: 400px;
+#topLinks a:visited {
+	text-decoration: none;
+    color: #000000 !important;
+    font-weight: bold;
+    cursor: default;
 }
 
-.dialogVPanel {
-  margin: 5px;
+#topLinks a:active {
+	text-decoration: none;
+    color: #000000 !important;
+    font-weight: bold;
+    cursor: default;
 }
 
-.serverResponseLabelError {
-  color: red;
+/* Style for footer nav */
+
+#footer a:link {
+    text-decoration: none;
+    color: #000000 !important;
+    font-weight: bold;
+    cursor: default;
 }
 
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+#footer a:hover {
+	text-decoration: none;
+    color: #000000 !important;
+    font-weight: bold;
+
+    text-decoration: underline;
+    cursor: default;
+}
+
+#topLinks a:visited {
+	text-decoration: none;
+    color: #000000 !important;
+    font-weight: bold;
+    cursor: default;
+}
+
+#footer a:active {
+	text-decoration: none;
+    color: #000000 !important;
+    font-weight: bold;
+    cursor: default;
+}
+
+a:link, a:hover, a:visited, a:active {
+	cursor: default;
 }

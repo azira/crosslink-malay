@@ -40,20 +40,19 @@ public class Crosslink_malay implements EntryPoint {
 		
 		
 		final TextBox urlText = new TextBox();
-		urlText.setWidth("400");
+		//urlText.setWidth("600");
 		urlText.setText("http://");
-
+		urlText.addStyleName("urlField");
 		
 		Label lblName = new Label("Enter Malay Newspaper webpage: ");
-		Label wikiTitle = new Label("Wiki M2E");
-		wikiTitle.addStyleName("titleLabel");
+		lblName.addStyleName("label1");
 
 		Button goButton = new Button("GO");
 		goButton.addStyleName("goButton");
 		
 
 		RootPanel.get("labelText").add(lblName);
-		RootPanel.get("title").add(wikiTitle);
+	
 		RootPanel.get("urlField").add(urlText);
 		RootPanel.get("goButton").add(goButton);
 		urlText.addKeyUpHandler(new KeyUpHandler() {
@@ -81,6 +80,8 @@ public class Crosslink_malay implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				// if Html panel is there
 				RootPanel.get("htmlContainer").clear();
+				// inform user about time
+				Window.alert("The webpage might take up to 1 minute to load! Please wait!");
 				// Verify input url
 				if (isUrl(urlText.getText())) {
 					Window.alert("Please enter a Malay web source!");
@@ -133,11 +134,11 @@ public class Crosslink_malay implements EntryPoint {
 
 		@Override
 		public void onSuccess(Webcontent result) {
-			Window.alert("The webpage might take up to 1 minute to load! Please wait!");
+			
 			/* server returned result, show user the message */
 			webarticle = result.getwebContent();
 			HTMLPanel html = new HTMLPanel(webarticle);
-
+			html.addStyleName("htmlStyle");
 			// Get MalayList
 			//anchorArticle(html);
 			RootPanel.get("htmlContainer").add(html);

@@ -1,28 +1,27 @@
-/** Add css rules here for your application. */
-
-
-/** Example rules used by the template application (remove for your app) */
-
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+/** Style sheet for GWT Widgets
+ * Cross Language Wikipedia Link Discovery Web Version
+ * Author: Hazirah Hamdani
+ * Date: November 2012
+ *
+ * Crosslink_malay.css
+ * */
+.label1 {
+	font-family: Georgia, verdana, Helvetica, sans-serif;
 }
-.titleLabel {
-	font-size: 16px;
-	
+
+.urlField {
+	width: 500px;
+	font-family: Georgia, verdana, Helvetica, sans-serif;
 }
+
 .goButton {
-  display: block;
-  font-size: 10pt;
-  background-color: #ffffff;
-  font-weight: bold;
-  
+	display: block;
+	font-size: 10pt;
+	background-color: #ffffff;
+	font-weight: bold;
+	font-family: Georgia, verdana, Helvetica, sans-serif;
 }
 
-/** Most GWT widgets already have a style name defined */
 #gwt-Frame {
 	border-style: none;
 	width: 100%;
@@ -46,19 +45,11 @@ h1 {
 	width: 100%;
 	height: 700px;
 }
-.gwt-DialogBox {
-  width: 400px;
-}
 
-.dialogVPanel {
-  margin: 5px;
-}
-
-.serverResponseLabelError {
-  color: red;
-}
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+// Style for HTML widget
+.htmlStyle a:link, .htmlStyle a:active {
+	text-decoration: none;
+    color: blue;
+    font-weight: bold;
+    cursor: default;
 }
