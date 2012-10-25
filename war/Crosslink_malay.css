@@ -16,6 +16,27 @@ body {
   
 }
 
+h1 {
+	padding-top: 30px;
+	padding-bottom: 10px;
+	 font-family: Georgia,verdana, Helvetica, sans-serif;
+}
+
+h2 {
+	
+	 font-family: Georgia,verdana, Helvetica, sans-serif;
+	 font-size: 14px;
+}
+
+
+#webContent {
+	padding-left: 50px;
+	padding-right: 40px;
+	padding-top: 50px;
+	padding-bottom: 10px;
+}
+
+
 #topLinks {
 	
 	 font-family: Georgia,verdana, Helvetica, sans-serif;
@@ -23,6 +44,22 @@ body {
 
 #footer {
 	 font-family: Georgia,verdana, Helvetica, sans-serif;
+}
+
+#contentSmall {
+	width: 984px;
+	margin-left: auto;
+	margin-right: auto;
+	background: url("images/wikim2e_bg_small.png");
+	
+}
+
+#content {
+	width: 993px;
+	margin-left: auto;
+	margin-right: auto;
+	background: url("images/wikim2e_bg.png");
+	
 }
 
 /* Style for top link nav */
@@ -75,7 +112,7 @@ body {
     cursor: default;
 }
 
-#topLinks a:visited {
+#footer a:visited {
 	text-decoration: none;
     color: #000000 !important;
     font-weight: bold;
@@ -89,6 +126,25 @@ body {
     cursor: default;
 }
 
+
 a:link, a:hover, a:visited, a:active {
 	cursor: default;
 }
+
+#content a:link, #content a:visited, #content a:active {
+	cursor: default;
+	color: #000000;
+
+}
+
+#content a:hover, #contentSmall a:hover {
+	cursor: default;
+	font-weight: bold;
+}
+
+#contentSmall a:link, #contentSmall a:visited, #contentSmall a:active {
+	cursor: default;
+	color: #000000;
+
+}
+
