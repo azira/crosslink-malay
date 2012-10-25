@@ -27,6 +27,7 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 	public ArrayList<String> MalayWordList;
 	private static List<String> anchoredWords = new ArrayList<String>();
 	private static ArrayList<String> newCon = new ArrayList<String>();
+	private static HashMap<String, String> wordList = new HashMap<String, String>();
 
 
 	/***
@@ -35,7 +36,21 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 	 * 
 	 */
 	public Webcontent getwebcontent(String weburl, String MalayTable) {
+		// Make Hashmap
+		String MalayList[] = MalayFileList(MalayTable);
+		String mWord = "";
+		String wiki = "";
+		// Take both Malay Word and Wikipedia Index
+		for (int i = 0; i < MalayList.length; i++) {
+			String MalayWord[] = MalayList[i].split(":");
 
+			mWord = MalayWord[0];
+			wiki = MalayWord[1];
+
+			// Insert mWord and wiki into HashMap
+			wordList.put(mWord, wiki);
+		}
+		
 		Document doc = null;
 		String content = null;
 		try {
@@ -60,6 +75,7 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 				// get web content to anchor
 				String webText = t.text();
 				// Find anchor words
+				//System.out.println(webText);
 				String anchorContent = findWord(webText, MalayTable);
 				t.html(anchorContent);
 				t.prepend("<p>");
@@ -130,7 +146,7 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 						+ WordsToAnchor[j + 2] + " " + WordsToAnchor[j + 3];
 				// remove punctuation
 				tmpWord4 = tmpWord4.replaceAll("[\\p{Punct}&&[^<>./]]", "");
-				
+				System.out.print(tmpWord4 + "\n");
 			}
 
 			if (j + 2 < WordsMax) {
@@ -210,8 +226,15 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 		for (String word : MalayList) {
 			if ((StringUtils.equalsIgnoreCase(word, textString))
 					&& (!anchoredWords.contains(word))) {
-				textString = textString.replace(textString, "<anchor>"
-						+ textString + "</anchor>");
+				
+				// Find English Wikipedia Link
+				String wikiLink = wordList.get(WordUtils.capitalizeFully(word));
+				String anchorURL = "http://en.wikipedia.org/wiki/index.php?curid="
+						+ wikiLink;
+				
+				// anchor word
+				textString = textString.replace(textString, "<a href=\"" + anchorURL + "\">"
+						+ textString + "</a>");
 				anchoredWords.add(word);
 				newCon.add(textString);
 				replaced = true;
@@ -262,23 +285,7 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public String getMalayWiki(String word, String malayTable) {
-		String MalayList[] = MalayFileList(malayTable);
-		word = StringUtils.strip(word);
-		System.out.println(word);
-		HashMap<String, String> wordList = new HashMap<String, String>();
-		String mWord = "";
-		String wiki = "";
-		// Take both Malay Word and Wikipedia Index
-		for (int i = 0; i < MalayList.length; i++) {
-			String MalayWord[] = MalayList[i].split(":");
 
-			mWord = MalayWord[0];
-			wiki = MalayWord[1];
-
-			// Insert mWord and wiki into HashMap
-			wordList.put(mWord, wiki);
-		}
-		
 		return wordList.get(WordUtils.capitalizeFully(word));
 	}
 }

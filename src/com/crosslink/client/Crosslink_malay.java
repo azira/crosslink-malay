@@ -1,7 +1,7 @@
 /**
  * Copyright 2012
  * Author: Hazirah Hamdani
- * Title: WikiME: Cross Language Wikipedia Link Discovery Malay to English
+ * Title: WikiM2E: Cross Language Wikipedia Link Discovery Malay to English
  * Date: July - Nov 2012
  * 
  */
@@ -139,57 +139,8 @@ public class Crosslink_malay implements EntryPoint {
 			HTMLPanel html = new HTMLPanel(webarticle);
 
 			// Get MalayList
-			anchorArticle(html);
+			//anchorArticle(html);
 			RootPanel.get("htmlContainer").add(html);
-
-		}
-
-		/**
-		 * Add anchor link to respective Malay Word to English Wikipedia Use
-		 * Wikipedia Database Dump
-		 * 
-		 * @param html
-		 * 
-		 */
-		private void anchorArticle(final HTMLPanel html) {
-
-			// Find Tagged Words
-			NodeList<Element> anchors = html.getElement().getElementsByTagName(
-					"anchor");
-
-			for (int i = 0; i < anchors.getLength(); i++) {
-				final Element anchor = anchors.getItem(i);
-				String Word = anchor.getInnerHTML();
-				//delete spaces
-				Word =  Word.replace("\n", "");
-				final String anchorWord = Word;
-				
-			
-				// Find Word in Wikipedia Dump and retrieve English Wikipedia
-				wikiMEService.getMalayWiki(anchorWord, MalayTable,
-						new AsyncCallback<String>() {
-							@Override
-							public void onFailure(Throwable caught) {
-								/* server side error occured */
-								Window.alert("Unable to get hashmap table: "
-										+ caught.getMessage());
-							}
-
-							@Override
-							public void onSuccess(String result) {
-								
-								/* server returned result, show user the message */
-								wikiLink = result;
-								String anchorURL = "http://en.wikipedia.org/wiki/index.php?curid="
-										+ wikiLink;
-								Anchor link = new Anchor(anchorWord, false,
-										anchorURL, "_blank");
-								html.addAndReplaceElement(link, anchor);
-
-							}
-						});
-
-			}
 
 		}
 

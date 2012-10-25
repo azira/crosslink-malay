@@ -1,2 +1,0 @@
-serviceClass: com.crosslink.client.MessageService
-path: C60B6E08D819B6B7CA07AFD1CA26CC7F.gwt.rpc
