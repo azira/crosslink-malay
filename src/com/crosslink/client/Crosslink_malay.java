@@ -80,7 +80,7 @@ public class Crosslink_malay implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				// if Html panel is there
-				
+				RootPanel.get("htmlContainer").clear();
 				// Verify input url
 				if (isUrl(urlText.getText())) {
 					Window.alert("Please enter a Malay web source!");

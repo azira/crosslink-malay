@@ -70,16 +70,20 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 		if (weburl.contains("mediapermata")) {
 			Elements text = doc.select("p");
 
-			for (Element t : text) {
-				String tmp = t.toString();
+			for (int i=0; i < text.size(); i++) {
+				String tmp = (text.get(i)).toString();
 				// get web content to anchor
-				String webText = t.text();
+				String webText = (text.get(i)).text();
 				// Find anchor words
 				//System.out.println(webText);
+				if (i == 1) {
+					webText = "<b>" + webText + "</b>";
+				}
 				String anchorContent = findWord(webText, MalayTable);
-				t.html(anchorContent);
-				t.prepend("<p>");
-				t.append("</p>");
+				
+				(text.get(i)).html(anchorContent);
+				(text.get(i)).prepend("<p>");
+				(text.get(i)).append("</p>");
 
 
 			}
@@ -146,7 +150,7 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 						+ WordsToAnchor[j + 2] + " " + WordsToAnchor[j + 3];
 				// remove punctuation
 				tmpWord4 = tmpWord4.replaceAll("[\\p{Punct}&&[^<>./]]", "");
-				System.out.print(tmpWord4 + "\n");
+				//System.out.print(tmpWord4 + "\n");
 			}
 
 			if (j + 2 < WordsMax) {
