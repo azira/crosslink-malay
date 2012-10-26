@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -40,6 +41,9 @@ public class Crosslink_malay implements EntryPoint {
 		
 		
 		final TextBox urlText = new TextBox();
+		final HTML html = new HTML("<center>Loading...</center>");
+		html.setSize("500px", "500px");
+		html.addStyleName("loading");
 		//urlText.setWidth("600");
 		urlText.setText("http://");
 		urlText.addStyleName("urlField");
@@ -83,6 +87,7 @@ public class Crosslink_malay implements EntryPoint {
 				RootPanel.get("htmlContainer").clear();
 				// inform user about time
 				Window.alert("The webpage might take up to 1 minute to load! Please wait!");
+				RootPanel.get("loadText").add(html);
 				// Verify input url
 				if (isUrl(urlText.getText())) {
 					Window.alert("Please enter a Malay web source!");
@@ -129,6 +134,7 @@ public class Crosslink_malay implements EntryPoint {
 		public void onFailure(Throwable caught) {
 			/* server side error occured */
 			Window.alert("Unable to obtain server response");
+			RootPanel.get("loadText").clear();
 			HTMLPanel html = new HTMLPanel(caught.getMessage());
 			RootPanel.get("htmlContainer").add(html);
 		}
@@ -142,6 +148,7 @@ public class Crosslink_malay implements EntryPoint {
 			html.addStyleName("htmlStyle");
 			// Get MalayList
 			//anchorArticle(html);
+			RootPanel.get("loadText").clear();
 			RootPanel.get("htmlContainer").add(html);
 
 		}

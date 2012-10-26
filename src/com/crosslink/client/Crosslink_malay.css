@@ -9,6 +9,11 @@
 	font-family: Georgia, verdana, Helvetica, sans-serif;
 }
 
+.loading {
+	width: 400px;
+	height: 200px;
+}
+
 .urlField {
 	width: 500px;
 	font-family: Georgia, verdana, Helvetica, sans-serif;
