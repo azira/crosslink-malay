@@ -237,7 +237,7 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 						+ wikiLink;
 				
 				// anchor word
-				textString = textString.replace(textString, "<a href=\"" + anchorURL + "\">"
+				textString = textString.replace(textString, "<a target=\"_blank\" href=\"" + anchorURL + "\">"
 						+ textString + "</a>");
 				anchoredWords.add(word);
 				newCon.add(textString);

@@ -59,6 +59,7 @@ public class Crosslink_malay implements EntryPoint {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					RootPanel.get("htmlContainer").clear();
 					// Verify input url
 					if (isUrl(urlText.getText())) {
 						Window.alert("Please enter a Malay web source!");
