@@ -146,6 +146,7 @@ public class wikiMEServiceImpl extends RemoteServiceServlet implements
 				// remove punctuation
 				tmpWord4 = tmpWord4.replaceAll("[\\p{Punct}&&[^<>./]]", "");
 
+				
 			}
 
 			if ((i + 2) < WordsMax) {

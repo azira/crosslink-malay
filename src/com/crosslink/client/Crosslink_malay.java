@@ -86,7 +86,7 @@ public class Crosslink_malay implements EntryPoint {
 				// if Html panel is there
 				RootPanel.get("htmlContainer").clear();
 				// inform user about time
-				Window.alert("The webpage might take up to 1 minute to load! Please wait!");
+				Window.alert("The webpage might take few minutes to load! Please wait!");
 				RootPanel.get("loadText").add(html);
 				// Verify input url
 				if (isUrl(urlText.getText())) {
